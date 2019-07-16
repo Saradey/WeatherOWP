@@ -25,6 +25,8 @@ android {
     }
 }
 
+ext.kodeinVersion = '6.3.3'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -55,6 +57,12 @@ dependencies {
 
     //mockito
     implementation 'org.mockito:mockito-core:3.0.0'
+
+
+    //di
+    implementation "org.kodein.di:kodein-di-generic-jvm:$kodeinVersion"
+    implementation "org.kodein.di:kodein-di-erased-jvm:$kodeinVersion"
+    implementation "org.kodein.di:kodein-di-framework-android-x:$kodeinVersion"
 
 }
 
