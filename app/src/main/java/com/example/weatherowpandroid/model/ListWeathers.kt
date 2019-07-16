@@ -1,6 +1,9 @@
 package com.example.weatherowpandroid.model
 
 import com.google.gson.annotations.SerializedName
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.RealmClass
 
 
 /**
@@ -8,17 +11,18 @@ import com.google.gson.annotations.SerializedName
  * jtgn@yandex.ru
  */
 
-data class ListWeathers(
+
+open class ListWeathers : RealmObject() {
     @SerializedName("dt")
-    val dt: Int? = null,
+    var dt: Int? = null
     @SerializedName("main")
-    val main: Main? = null,
+    var main: Main? = null
     @SerializedName("weather")
-    val weather: List<Weather>? = null,
+    var weather: RealmList<Weather>? = RealmList()
     @SerializedName("clouds")
-    val clouds: Clouds? = null,
+    var clouds: Clouds? = null
     @SerializedName("wind")
-    val wind: Wind? = null,
+    var wind: Wind? = null
     @SerializedName("sys")
-    val sys: Sys? = null
-)
+    var sys: Sys? = null
+}

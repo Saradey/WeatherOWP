@@ -1,6 +1,7 @@
 package com.example.weatherowpandroid.model
 
 import com.google.gson.annotations.SerializedName
+import io.realm.RealmObject
 
 
 /**
@@ -8,9 +9,9 @@ import com.google.gson.annotations.SerializedName
  * jtgn@yandex.ru
  */
 
-data class Wind(
+open class Wind : RealmObject(){
     @SerializedName("speed")
-    var speed: Float? = null,
+    var speed: Float? = null
     @SerializedName("deg")
     var deg: Float? = null
-)
+}
