@@ -3,6 +3,7 @@ package com.example.weatherowpandroid.model
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 
 
@@ -13,8 +14,9 @@ import io.realm.annotations.RealmClass
 
 
 open class ListWeathers : RealmObject() {
+    @PrimaryKey
     @SerializedName("dt")
-    var dt: Long? = null
+    var dt: Int? = null
     @SerializedName("main")
     var main: Main? = null
     @SerializedName("weather")

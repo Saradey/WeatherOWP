@@ -1,8 +1,6 @@
 package com.example.weatherowpandroid
 
 import com.example.weatherowpandroid.common.managers.NetworkManager
-import com.example.weatherowpandroid.model.FullResponseListWeathers
-import com.example.weatherowpandroid.model.ModelView.BaseModelView
 import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.mvp.presenter.ListWeatherPresenter
 import com.example.weatherowpandroid.rest.RestClient
@@ -11,7 +9,6 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
-import io.realm.RealmResults
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

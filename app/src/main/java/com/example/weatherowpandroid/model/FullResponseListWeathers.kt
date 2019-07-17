@@ -11,9 +11,8 @@ import io.realm.annotations.PrimaryKey
  * jtgn@yandex.ru
  */
 
-open class FullResponseListWeathers : RealmObject(){
-    @PrimaryKey
-    var primary = 1
+
+class FullResponseListWeathers {
     @SerializedName("cod")
     var cod: String? = null
     @SerializedName("list")

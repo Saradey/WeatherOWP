@@ -7,5 +7,6 @@
     <string name="str_many_cloudy">Немного облачно</string>
     <string name="str_cloudy">Облачно</string>
     <string name="str_dark">Беспросветная тьма…</string>
+    <string name="str_description">Подробное описание погоды:</string>
 
 </resources>

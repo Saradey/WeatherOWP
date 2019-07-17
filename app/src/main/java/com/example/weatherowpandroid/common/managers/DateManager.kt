@@ -11,7 +11,7 @@ import java.util.*
 class DateManager {
 
     companion object {
-        fun formatToDate(unixTime: Long?): String {
+        fun formatToDate(unixTime: Int?): String {
             val date = Date(unixTime!!*1000L)
             val format = SimpleDateFormat("dd MMMM yyyy, HH:mm")
             return format.format(date)

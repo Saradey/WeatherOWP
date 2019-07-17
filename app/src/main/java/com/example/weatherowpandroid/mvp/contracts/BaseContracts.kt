@@ -13,28 +13,14 @@ class BaseContracts {
 
     interface View
 
-    abstract class Presenter<V : View>{
-
-        private val subscriptions = CompositeDisposable()
+    abstract class Presenter<V : View> {
         protected lateinit var view: V
 
-        fun subscribe(subscription: Disposable){
-            subscriptions.add(subscription)
-        }
-
-        private fun unsubscribe(){
-            subscriptions.clear()
-        }
-
-        fun attach(view : V){
+        fun attach(view: V) {
             this.view = view
         }
 
-        fun detach(){
-            unsubscribe()
-        }
-
+        abstract fun detach()
     }
-
 
 }

@@ -3,7 +3,7 @@ package com.example.weatherowpandroid.ui.adapters
 import android.util.ArrayMap
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherowpandroid.model.ModelView.BaseModelView
+import com.example.weatherowpandroid.model.view.BaseModelView
 import com.example.weatherowpandroid.ui.holders.BaseViewHolder
 
 /**

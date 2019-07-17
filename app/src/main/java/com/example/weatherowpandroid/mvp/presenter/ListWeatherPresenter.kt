@@ -2,9 +2,10 @@ package com.example.weatherowpandroid.mvp.presenter
 
 import android.annotation.SuppressLint
 import com.example.weatherowpandroid.common.managers.NetworkManager
-import com.example.weatherowpandroid.model.FullResponseListWeathers
-import com.example.weatherowpandroid.model.ModelView.BaseModelView
-import com.example.weatherowpandroid.model.ModelView.ItemListWeatherModelView
+import com.example.weatherowpandroid.model.ListWeathers
+import com.example.weatherowpandroid.model.view.BaseModelView
+import com.example.weatherowpandroid.model.view.ItemListWeatherModelView
+import com.example.weatherowpandroid.mvp.MainActivityRouter
 import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.rest.api.WeatherListByHourApi
 import com.example.weatherowpandroid.rest.request.GetWeathersRequest
@@ -55,15 +56,14 @@ class ListWeatherPresenter(
     }
 
 
-
     private fun loadFromNetwork(cityName: String): Observable<BaseModelView> {
         return weatherApi.getListWeathersByHours(GetWeathersRequest(cityName).toRequest())
-            .doOnNext(::saveToDataBase)
             .flatMap {
                 Observable.fromIterable(it.list)
             }
+            .doOnNext(::saveToDataBase)
             .map {
-                ItemListWeatherModelView(it)
+                ItemListWeatherModelView(it, view as MainActivityRouter)
             }
     }
 
@@ -71,15 +71,16 @@ class ListWeatherPresenter(
     private fun loadFromDatabase(): Observable<BaseModelView> {
         return Observable.fromCallable {
             realm = Realm.getDefaultInstance()
-            val realmResult = realm.where(FullResponseListWeathers::class.java)
-                .findFirst()
+            val realmResult = realm.where(ListWeathers::class.java)
+                .findAll()
             realm.copyFromRealm(realmResult)
         }.flatMap {
-            Observable.fromIterable(it.list)
+            Observable.fromIterable(it)
         }.map {
-            ItemListWeatherModelView(it)
+            ItemListWeatherModelView(it, view as MainActivityRouter)
         }
     }
+
 
 
     private fun saveToDataBase(item: RealmObject) {

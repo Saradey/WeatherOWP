@@ -1,8 +1,9 @@
-package com.example.weatherowpandroid.model.ModelView
+package com.example.weatherowpandroid.model.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.weatherowpandroid.model.type.holder.LayoutTypes
 import com.example.weatherowpandroid.ui.holders.BaseViewHolder
 
 /**

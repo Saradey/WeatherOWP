@@ -1,6 +1,8 @@
 package com.example.weatherowpandroid.mvp.contracts
 
-import com.example.weatherowpandroid.model.ModelView.BaseModelView
+import com.example.weatherowpandroid.model.view.BaseModelView
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by Evgeny Goncharov on 16,July, 2019
@@ -9,7 +11,7 @@ import com.example.weatherowpandroid.model.ModelView.BaseModelView
 
 class ListWeatherContract {
 
-    interface View : BaseContracts.View{
+    interface View : BaseContracts.View {
 
         fun setWeathersListToView(it: List<BaseModelView>)
 
@@ -17,15 +19,26 @@ class ListWeatherContract {
 
         fun hideProgress()
 
-        fun error(message : String?)
+        fun error(message: String?)
 
     }
 
 
-    abstract class Presenter : BaseContracts.Presenter<View>(){
+    abstract class Presenter : BaseContracts.Presenter<View>() {
+        private val subscriptions = CompositeDisposable()
 
+        fun subscribe(subscription: Disposable) {
+            subscriptions.add(subscription)
+        }
+
+        private fun unsubscribe() {
+            subscriptions.clear()
+        }
+
+        override fun detach() {
+            unsubscribe()
+        }
     }
-
 
 
 }

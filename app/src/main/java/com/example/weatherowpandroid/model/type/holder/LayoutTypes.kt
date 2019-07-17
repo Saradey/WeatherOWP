@@ -1,4 +1,4 @@
-package com.example.weatherowpandroid.model.ModelView
+package com.example.weatherowpandroid.model.type.holder
 
 import com.example.weatherowpandroid.R
 
