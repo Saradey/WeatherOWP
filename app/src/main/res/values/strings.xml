@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">WeatherOWPAndroid</string>
+    <string name="app_name">Погода</string>
+
+    <string name="description_icon">icon weather background</string>
+
+    <string name="str_cloudless">Безоблачно</string>
+    <string name="str_many_cloudy">Немного облачно</string>
+    <string name="str_cloudy">Облачно</string>
+    <string name="str_dark">Беспросветная тьма…</string>
+
 </resources>

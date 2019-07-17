@@ -44,6 +44,15 @@ class ListWeatherPresenterTests {
         const val cityName = "Default"
     }
 
+    @Mock
+    lateinit var realm: Realm
+
+    @Mock
+    lateinit var networkManager: NetworkManager
+
+    @Mock
+    lateinit var view: ListWeatherContract.View
+
 
     @Before
     fun afterForTest() {
@@ -56,7 +65,6 @@ class ListWeatherPresenterTests {
         presenter = ListWeatherPresenter(
             apiWea,
             networkManager,
-            realm,
             backgroundScheduler,
             mainThread
         )
@@ -64,14 +72,7 @@ class ListWeatherPresenterTests {
     }
 
 
-    @Mock
-    lateinit var realm: Realm
 
-    @Mock
-    lateinit var networkManager: NetworkManager
-
-    @Mock
-    lateinit var view: ListWeatherContract.View
 
 
     //кейс: успешная загрузка
@@ -80,6 +81,7 @@ class ListWeatherPresenterTests {
         Mockito.`when`(networkManager.getNetworkState())
             .thenReturn(Observable.just(true))
 
+        presenter.realm = realm
         presenter.getWeathersList(ListWeatherPresenterTests.cityName)
 
         val inOrder = inOrder(networkManager, view, realm)
@@ -101,10 +103,10 @@ class ListWeatherPresenterTests {
         presenter = ListWeatherPresenter(
             apiWea,
             networkManager,
-            realm,
             backgroundScheduler,
             mainThread
         )
+        presenter.realm = realm
         presenter.attach(view)
 
         presenter.getWeathersList(ListWeatherPresenterTests.cityName)

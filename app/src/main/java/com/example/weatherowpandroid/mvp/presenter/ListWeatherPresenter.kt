@@ -23,10 +23,11 @@ import io.realm.RealmObject
 class ListWeatherPresenter(
     private val weatherApi: WeatherListByHourApi,
     private val networkManager: NetworkManager,
-    private val realm: Realm,
     private val backgroundScheduler: Scheduler,
     private val mainThread: Scheduler
 ) : ListWeatherContract.Presenter() {
+
+    lateinit var realm: Realm
 
 
     fun getWeathersList(cityName: String) {
@@ -54,6 +55,7 @@ class ListWeatherPresenter(
     }
 
 
+
     private fun loadFromNetwork(cityName: String): Observable<BaseModelView> {
         return weatherApi.getListWeathersByHours(GetWeathersRequest(cityName).toRequest())
             .doOnNext(::saveToDataBase)
@@ -68,6 +70,7 @@ class ListWeatherPresenter(
 
     private fun loadFromDatabase(): Observable<BaseModelView> {
         return Observable.fromCallable {
+            realm = Realm.getDefaultInstance()
             val realmResult = realm.where(FullResponseListWeathers::class.java)
                 .findFirst()
             realm.copyFromRealm(realmResult)
@@ -80,13 +83,11 @@ class ListWeatherPresenter(
 
 
     private fun saveToDataBase(item: RealmObject) {
+        realm = Realm.getDefaultInstance()
         realm.executeTransaction {
             it.copyToRealmOrUpdate(item)
         }
     }
 
 
-    override fun destroy() {
-        realm.close()
-    }
 }

@@ -34,7 +34,6 @@ class BaseContracts {
             unsubscribe()
         }
 
-        abstract fun destroy()
     }
 
 

@@ -21,16 +21,17 @@ import java.util.concurrent.TimeUnit
 @SuppressLint("NewApi", "MissingPermission")
 open class NetworkManager {
 
-    lateinit var context: Context
-
-
-    private var network: NetworkInfo?
-
-    init {
+    var context: Context? = null
+        set(value) {
         val cm =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            value!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         network = cm.activeNetworkInfo
-    }
+            field = value
+        }
+
+
+    private var network: NetworkInfo? = null
+
 
 
 
