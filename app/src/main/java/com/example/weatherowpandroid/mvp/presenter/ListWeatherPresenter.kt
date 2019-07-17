@@ -5,7 +5,7 @@ import com.example.weatherowpandroid.common.managers.NetworkManager
 import com.example.weatherowpandroid.model.FullResponseListWeathers
 import com.example.weatherowpandroid.model.ModelView.BaseModelView
 import com.example.weatherowpandroid.model.ModelView.ItemListWeatherModelView
-import com.example.weatherowpandroid.mvp.contracts.ListWeatherContact
+import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.rest.api.WeatherListByHourApi
 import com.example.weatherowpandroid.rest.request.GetWeathersRequest
 import io.reactivex.Observable
@@ -26,7 +26,7 @@ class ListWeatherPresenter(
     private val realm: Realm,
     private val backgroundScheduler: Scheduler,
     private val mainThread: Scheduler
-) : ListWeatherContact.Presenter() {
+) : ListWeatherContract.Presenter() {
 
 
     fun getWeathersList(cityName: String) {
@@ -69,8 +69,8 @@ class ListWeatherPresenter(
     private fun loadFromDatabase(): Observable<BaseModelView> {
         return Observable.fromCallable {
             val realmResult = realm.where(FullResponseListWeathers::class.java)
-                .findAll()
-            realm.copyFromRealm(realmResult)[0]
+                .findFirst()
+            realm.copyFromRealm(realmResult)
         }.flatMap {
             Observable.fromIterable(it.list)
         }.map {
@@ -86,4 +86,7 @@ class ListWeatherPresenter(
     }
 
 
+    override fun destroy() {
+        realm.close()
+    }
 }

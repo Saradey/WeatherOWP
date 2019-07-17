@@ -28,7 +28,7 @@ class RestClient {
 
     private fun getClientMonitorHTTPBody(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor { message ->
-            Log.d(LOG_REST, message)
+//            Log.d(LOG_REST, message)
         }
 
         interceptor.level = HttpLoggingInterceptor.Level.BODY

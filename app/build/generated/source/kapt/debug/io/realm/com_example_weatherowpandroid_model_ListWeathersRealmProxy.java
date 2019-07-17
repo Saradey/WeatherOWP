@@ -41,9 +41,10 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
         long cloudsIndex;
         long windIndex;
         long sysIndex;
+        long dtTxtIndex;
 
         ListWeathersColumnInfo(OsSchemaInfo schemaInfo) {
-            super(6);
+            super(7);
             OsObjectSchemaInfo objectSchemaInfo = schemaInfo.getObjectSchemaInfo("ListWeathers");
             this.dtIndex = addColumnDetails("dt", "dt", objectSchemaInfo);
             this.mainIndex = addColumnDetails("main", "main", objectSchemaInfo);
@@ -51,6 +52,7 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
             this.cloudsIndex = addColumnDetails("clouds", "clouds", objectSchemaInfo);
             this.windIndex = addColumnDetails("wind", "wind", objectSchemaInfo);
             this.sysIndex = addColumnDetails("sys", "sys", objectSchemaInfo);
+            this.dtTxtIndex = addColumnDetails("dtTxt", "dtTxt", objectSchemaInfo);
         }
 
         ListWeathersColumnInfo(ColumnInfo src, boolean mutable) {
@@ -73,6 +75,7 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
             dst.cloudsIndex = src.cloudsIndex;
             dst.windIndex = src.windIndex;
             dst.sysIndex = src.sysIndex;
+            dst.dtTxtIndex = src.dtTxtIndex;
         }
     }
 
@@ -102,16 +105,16 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
 
     @Override
     @SuppressWarnings("cast")
-    public Integer realmGet$dt() {
+    public Long realmGet$dt() {
         proxyState.getRealm$realm().checkIfValid();
         if (proxyState.getRow$realm().isNull(columnInfo.dtIndex)) {
             return null;
         }
-        return (int) proxyState.getRow$realm().getLong(columnInfo.dtIndex);
+        return (long) proxyState.getRow$realm().getLong(columnInfo.dtIndex);
     }
 
     @Override
-    public void realmSet$dt(Integer value) {
+    public void realmSet$dt(Long value) {
         if (proxyState.isUnderConstruction()) {
             if (!proxyState.getAcceptDefaultValue$realm()) {
                 return;
@@ -358,14 +361,45 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
         proxyState.getRow$realm().setLink(columnInfo.sysIndex, ((RealmObjectProxy) value).realmGet$proxyState().getRow$realm().getIndex());
     }
 
+    @Override
+    @SuppressWarnings("cast")
+    public String realmGet$dtTxt() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (java.lang.String) proxyState.getRow$realm().getString(columnInfo.dtTxtIndex);
+    }
+
+    @Override
+    public void realmSet$dtTxt(String value) {
+        if (proxyState.isUnderConstruction()) {
+            if (!proxyState.getAcceptDefaultValue$realm()) {
+                return;
+            }
+            final Row row = proxyState.getRow$realm();
+            if (value == null) {
+                row.getTable().setNull(columnInfo.dtTxtIndex, row.getIndex(), true);
+                return;
+            }
+            row.getTable().setString(columnInfo.dtTxtIndex, row.getIndex(), value, true);
+            return;
+        }
+
+        proxyState.getRealm$realm().checkIfValid();
+        if (value == null) {
+            proxyState.getRow$realm().setNull(columnInfo.dtTxtIndex);
+            return;
+        }
+        proxyState.getRow$realm().setString(columnInfo.dtTxtIndex, value);
+    }
+
     private static OsObjectSchemaInfo createExpectedObjectSchemaInfo() {
-        OsObjectSchemaInfo.Builder builder = new OsObjectSchemaInfo.Builder("ListWeathers", 6, 0);
+        OsObjectSchemaInfo.Builder builder = new OsObjectSchemaInfo.Builder("ListWeathers", 7, 0);
         builder.addPersistedProperty("dt", RealmFieldType.INTEGER, !Property.PRIMARY_KEY, !Property.INDEXED, !Property.REQUIRED);
         builder.addPersistedLinkProperty("main", RealmFieldType.OBJECT, "Main");
         builder.addPersistedLinkProperty("weather", RealmFieldType.LIST, "Weather");
         builder.addPersistedLinkProperty("clouds", RealmFieldType.OBJECT, "Clouds");
         builder.addPersistedLinkProperty("wind", RealmFieldType.OBJECT, "Wind");
         builder.addPersistedLinkProperty("sys", RealmFieldType.OBJECT, "Sys");
+        builder.addPersistedProperty("dtTxt", RealmFieldType.STRING, !Property.PRIMARY_KEY, !Property.INDEXED, !Property.REQUIRED);
         return builder.build();
     }
 
@@ -411,7 +445,7 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
             if (json.isNull("dt")) {
                 objProxy.realmSet$dt(null);
             } else {
-                objProxy.realmSet$dt((int) json.getInt("dt"));
+                objProxy.realmSet$dt((long) json.getLong("dt"));
             }
         }
         if (json.has("main")) {
@@ -458,6 +492,13 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
                 objProxy.realmSet$sys(sysObj);
             }
         }
+        if (json.has("dtTxt")) {
+            if (json.isNull("dtTxt")) {
+                objProxy.realmSet$dtTxt(null);
+            } else {
+                objProxy.realmSet$dtTxt((String) json.getString("dtTxt"));
+            }
+        }
         return obj;
     }
 
@@ -473,7 +514,7 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
             if (false) {
             } else if (name.equals("dt")) {
                 if (reader.peek() != JsonToken.NULL) {
-                    objProxy.realmSet$dt((int) reader.nextInt());
+                    objProxy.realmSet$dt((long) reader.nextLong());
                 } else {
                     reader.skipValue();
                     objProxy.realmSet$dt(null);
@@ -522,6 +563,13 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
                 } else {
                     com.example.weatherowpandroid.model.Sys sysObj = com_example_weatherowpandroid_model_SysRealmProxy.createUsingJsonStream(realm, reader);
                     objProxy.realmSet$sys(sysObj);
+                }
+            } else if (name.equals("dtTxt")) {
+                if (reader.peek() != JsonToken.NULL) {
+                    objProxy.realmSet$dtTxt((String) reader.nextString());
+                } else {
+                    reader.skipValue();
+                    objProxy.realmSet$dtTxt(null);
                 }
             } else {
                 reader.skipValue();
@@ -628,6 +676,7 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
                 realmObjectCopy.realmSet$sys(com_example_weatherowpandroid_model_SysRealmProxy.copyOrUpdate(realm, sysObj, update, cache));
             }
         }
+        realmObjectCopy.realmSet$dtTxt(realmObjectSource.realmGet$dtTxt());
         return realmObject;
     }
 
@@ -691,6 +740,10 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
                 cachesys = com_example_weatherowpandroid_model_SysRealmProxy.insert(realm, sysObj, cache);
             }
             Table.nativeSetLink(tableNativePtr, columnInfo.sysIndex, rowIndex, cachesys, false);
+        }
+        String realmGet$dtTxt = ((com_example_weatherowpandroid_model_ListWeathersRealmProxyInterface) object).realmGet$dtTxt();
+        if (realmGet$dtTxt != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo.dtTxtIndex, rowIndex, realmGet$dtTxt, false);
         }
         return rowIndex;
     }
@@ -762,6 +815,10 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
                     cachesys = com_example_weatherowpandroid_model_SysRealmProxy.insert(realm, sysObj, cache);
                 }
                 table.setLink(columnInfo.sysIndex, rowIndex, cachesys, false);
+            }
+            String realmGet$dtTxt = ((com_example_weatherowpandroid_model_ListWeathersRealmProxyInterface) object).realmGet$dtTxt();
+            if (realmGet$dtTxt != null) {
+                Table.nativeSetString(tableNativePtr, columnInfo.dtTxtIndex, rowIndex, realmGet$dtTxt, false);
             }
         }
     }
@@ -851,6 +908,12 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
             Table.nativeSetLink(tableNativePtr, columnInfo.sysIndex, rowIndex, cachesys, false);
         } else {
             Table.nativeNullifyLink(tableNativePtr, columnInfo.sysIndex, rowIndex);
+        }
+        String realmGet$dtTxt = ((com_example_weatherowpandroid_model_ListWeathersRealmProxyInterface) object).realmGet$dtTxt();
+        if (realmGet$dtTxt != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo.dtTxtIndex, rowIndex, realmGet$dtTxt, false);
+        } else {
+            Table.nativeSetNull(tableNativePtr, columnInfo.dtTxtIndex, rowIndex, false);
         }
         return rowIndex;
     }
@@ -948,6 +1011,12 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
             } else {
                 Table.nativeNullifyLink(tableNativePtr, columnInfo.sysIndex, rowIndex);
             }
+            String realmGet$dtTxt = ((com_example_weatherowpandroid_model_ListWeathersRealmProxyInterface) object).realmGet$dtTxt();
+            if (realmGet$dtTxt != null) {
+                Table.nativeSetString(tableNativePtr, columnInfo.dtTxtIndex, rowIndex, realmGet$dtTxt, false);
+            } else {
+                Table.nativeSetNull(tableNativePtr, columnInfo.dtTxtIndex, rowIndex, false);
+            }
         }
     }
 
@@ -998,6 +1067,7 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
 
         // Deep copy of sys
         unmanagedCopy.realmSet$sys(com_example_weatherowpandroid_model_SysRealmProxy.createDetachedCopy(realmSource.realmGet$sys(), currentDepth + 1, maxDepth, cache));
+        unmanagedCopy.realmSet$dtTxt(realmSource.realmGet$dtTxt());
 
         return unmanagedObject;
     }
@@ -1031,6 +1101,10 @@ public class com_example_weatherowpandroid_model_ListWeathersRealmProxy extends 
         stringBuilder.append(",");
         stringBuilder.append("{sys:");
         stringBuilder.append(realmGet$sys() != null ? "Sys" : "null");
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{dtTxt:");
+        stringBuilder.append(realmGet$dtTxt() != null ? realmGet$dtTxt() : "null");
         stringBuilder.append("}");
         stringBuilder.append("]");
         return stringBuilder.toString();

@@ -19,7 +19,10 @@ import java.util.concurrent.TimeUnit
 
 //lint глючит -_-
 @SuppressLint("NewApi", "MissingPermission")
-class NetworkManager(private val context: Context) {
+open class NetworkManager {
+
+    lateinit var context: Context
+
 
     private var network: NetworkInfo?
 
@@ -63,7 +66,7 @@ class NetworkManager(private val context: Context) {
     }
 
 
-    fun getNetworkState(): Observable<Boolean> {
+    open fun getNetworkState(): Observable<Boolean> {
         return Observable.fromCallable(isOnlineBackEnd())
     }
 

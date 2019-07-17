@@ -33,6 +33,8 @@ class BaseContracts {
         fun detach(){
             unsubscribe()
         }
+
+        abstract fun destroy()
     }
 
 

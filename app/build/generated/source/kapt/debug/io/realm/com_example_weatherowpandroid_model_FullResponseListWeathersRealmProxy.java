@@ -35,12 +35,14 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
     implements RealmObjectProxy, com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface {
 
     static final class FullResponseListWeathersColumnInfo extends ColumnInfo {
+        long primaryIndex;
         long codIndex;
         long listIndex;
 
         FullResponseListWeathersColumnInfo(OsSchemaInfo schemaInfo) {
-            super(2);
+            super(3);
             OsObjectSchemaInfo objectSchemaInfo = schemaInfo.getObjectSchemaInfo("FullResponseListWeathers");
+            this.primaryIndex = addColumnDetails("primary", "primary", objectSchemaInfo);
             this.codIndex = addColumnDetails("cod", "cod", objectSchemaInfo);
             this.listIndex = addColumnDetails("list", "list", objectSchemaInfo);
         }
@@ -59,6 +61,7 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         protected final void copy(ColumnInfo rawSrc, ColumnInfo rawDst) {
             final FullResponseListWeathersColumnInfo src = (FullResponseListWeathersColumnInfo) rawSrc;
             final FullResponseListWeathersColumnInfo dst = (FullResponseListWeathersColumnInfo) rawDst;
+            dst.primaryIndex = src.primaryIndex;
             dst.codIndex = src.codIndex;
             dst.listIndex = src.listIndex;
         }
@@ -86,6 +89,24 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         proxyState.setRow$realm(context.getRow());
         proxyState.setAcceptDefaultValue$realm(context.getAcceptDefaultValue());
         proxyState.setExcludeFields$realm(context.getExcludeFields());
+    }
+
+    @Override
+    @SuppressWarnings("cast")
+    public int realmGet$primary() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (int) proxyState.getRow$realm().getLong(columnInfo.primaryIndex);
+    }
+
+    @Override
+    public void realmSet$primary(int value) {
+        if (proxyState.isUnderConstruction()) {
+            // default value of the primary key is always ignored.
+            return;
+        }
+
+        proxyState.getRealm$realm().checkIfValid();
+        throw new io.realm.exceptions.RealmException("Primary key field 'primary' cannot be changed after object was created.");
     }
 
     @Override
@@ -180,7 +201,8 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
     }
 
     private static OsObjectSchemaInfo createExpectedObjectSchemaInfo() {
-        OsObjectSchemaInfo.Builder builder = new OsObjectSchemaInfo.Builder("FullResponseListWeathers", 2, 0);
+        OsObjectSchemaInfo.Builder builder = new OsObjectSchemaInfo.Builder("FullResponseListWeathers", 3, 0);
+        builder.addPersistedProperty("primary", RealmFieldType.INTEGER, Property.PRIMARY_KEY, Property.INDEXED, Property.REQUIRED);
         builder.addPersistedProperty("cod", RealmFieldType.STRING, !Property.PRIMARY_KEY, !Property.INDEXED, !Property.REQUIRED);
         builder.addPersistedLinkProperty("list", RealmFieldType.LIST, "ListWeathers");
         return builder.build();
@@ -206,10 +228,39 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
     public static com.example.weatherowpandroid.model.FullResponseListWeathers createOrUpdateUsingJsonObject(Realm realm, JSONObject json, boolean update)
         throws JSONException {
         final List<String> excludeFields = new ArrayList<String>(1);
-        if (json.has("list")) {
-            excludeFields.add("list");
+        com.example.weatherowpandroid.model.FullResponseListWeathers obj = null;
+        if (update) {
+            Table table = realm.getTable(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
+            FullResponseListWeathersColumnInfo columnInfo = (FullResponseListWeathersColumnInfo) realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
+            long pkColumnIndex = columnInfo.primaryIndex;
+            long rowIndex = Table.NO_MATCH;
+            if (!json.isNull("primary")) {
+                rowIndex = table.findFirstLong(pkColumnIndex, json.getLong("primary"));
+            }
+            if (rowIndex != Table.NO_MATCH) {
+                final BaseRealm.RealmObjectContext objectContext = BaseRealm.objectContext.get();
+                try {
+                    objectContext.set(realm, table.getUncheckedRow(rowIndex), realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class), false, Collections.<String> emptyList());
+                    obj = new io.realm.com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxy();
+                } finally {
+                    objectContext.clear();
+                }
+            }
         }
-        com.example.weatherowpandroid.model.FullResponseListWeathers obj = realm.createObjectInternal(com.example.weatherowpandroid.model.FullResponseListWeathers.class, true, excludeFields);
+        if (obj == null) {
+            if (json.has("list")) {
+                excludeFields.add("list");
+            }
+            if (json.has("primary")) {
+                if (json.isNull("primary")) {
+                    obj = (io.realm.com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxy) realm.createObjectInternal(com.example.weatherowpandroid.model.FullResponseListWeathers.class, null, true, excludeFields);
+                } else {
+                    obj = (io.realm.com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxy) realm.createObjectInternal(com.example.weatherowpandroid.model.FullResponseListWeathers.class, json.getInt("primary"), true, excludeFields);
+                }
+            } else {
+                throw new IllegalArgumentException("JSON object doesn't have the primary key field 'primary'.");
+            }
+        }
 
         final com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface objProxy = (com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) obj;
         if (json.has("cod")) {
@@ -238,12 +289,21 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static com.example.weatherowpandroid.model.FullResponseListWeathers createUsingJsonStream(Realm realm, JsonReader reader)
         throws IOException {
+        boolean jsonHasPrimaryKey = false;
         final com.example.weatherowpandroid.model.FullResponseListWeathers obj = new com.example.weatherowpandroid.model.FullResponseListWeathers();
         final com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface objProxy = (com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) obj;
         reader.beginObject();
         while (reader.hasNext()) {
             String name = reader.nextName();
             if (false) {
+            } else if (name.equals("primary")) {
+                if (reader.peek() != JsonToken.NULL) {
+                    objProxy.realmSet$primary((int) reader.nextInt());
+                } else {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field 'primary' to null.");
+                }
+                jsonHasPrimaryKey = true;
             } else if (name.equals("cod")) {
                 if (reader.peek() != JsonToken.NULL) {
                     objProxy.realmSet$cod((String) reader.nextString());
@@ -269,6 +329,9 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
             }
         }
         reader.endObject();
+        if (!jsonHasPrimaryKey) {
+            throw new IllegalArgumentException("JSON object doesn't have the primary key field 'primary'.");
+        }
         return realm.copyToRealm(obj);
     }
 
@@ -288,7 +351,27 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
             return (com.example.weatherowpandroid.model.FullResponseListWeathers) cachedRealmObject;
         }
 
-        return copy(realm, object, update, cache);
+        com.example.weatherowpandroid.model.FullResponseListWeathers realmObject = null;
+        boolean canUpdate = update;
+        if (canUpdate) {
+            Table table = realm.getTable(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
+            FullResponseListWeathersColumnInfo columnInfo = (FullResponseListWeathersColumnInfo) realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
+            long pkColumnIndex = columnInfo.primaryIndex;
+            long rowIndex = table.findFirstLong(pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+            if (rowIndex == Table.NO_MATCH) {
+                canUpdate = false;
+            } else {
+                try {
+                    objectContext.set(realm, table.getUncheckedRow(rowIndex), realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class), false, Collections.<String> emptyList());
+                    realmObject = new io.realm.com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxy();
+                    cache.put(object, (RealmObjectProxy) realmObject);
+                } finally {
+                    objectContext.clear();
+                }
+            }
+        }
+
+        return (canUpdate) ? update(realm, realmObject, object, cache) : copy(realm, object, update, cache);
     }
 
     public static com.example.weatherowpandroid.model.FullResponseListWeathers copy(Realm realm, com.example.weatherowpandroid.model.FullResponseListWeathers newObject, boolean update, Map<RealmModel,RealmObjectProxy> cache) {
@@ -298,7 +381,7 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         }
 
         // rejecting default values to avoid creating unexpected objects from RealmModel/RealmList fields.
-        com.example.weatherowpandroid.model.FullResponseListWeathers realmObject = realm.createObjectInternal(com.example.weatherowpandroid.model.FullResponseListWeathers.class, false, Collections.<String>emptyList());
+        com.example.weatherowpandroid.model.FullResponseListWeathers realmObject = realm.createObjectInternal(com.example.weatherowpandroid.model.FullResponseListWeathers.class, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) newObject).realmGet$primary(), false, Collections.<String>emptyList());
         cache.put(newObject, (RealmObjectProxy) realmObject);
 
         com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface realmObjectSource = (com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) newObject;
@@ -331,7 +414,17 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         Table table = realm.getTable(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
         long tableNativePtr = table.getNativePtr();
         FullResponseListWeathersColumnInfo columnInfo = (FullResponseListWeathersColumnInfo) realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
-        long rowIndex = OsObject.createRow(table);
+        long pkColumnIndex = columnInfo.primaryIndex;
+        long rowIndex = Table.NO_MATCH;
+        Object primaryKeyValue = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary();
+        if (primaryKeyValue != null) {
+            rowIndex = Table.nativeFindFirstInt(tableNativePtr, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+        }
+        if (rowIndex == Table.NO_MATCH) {
+            rowIndex = OsObject.createRowWithPrimaryKey(table, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+        } else {
+            Table.throwDuplicatePrimaryKeyException(primaryKeyValue);
+        }
         cache.put(object, rowIndex);
         String realmGet$cod = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$cod();
         if (realmGet$cod != null) {
@@ -356,6 +449,7 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         Table table = realm.getTable(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
         long tableNativePtr = table.getNativePtr();
         FullResponseListWeathersColumnInfo columnInfo = (FullResponseListWeathersColumnInfo) realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
+        long pkColumnIndex = columnInfo.primaryIndex;
         com.example.weatherowpandroid.model.FullResponseListWeathers object = null;
         while (objects.hasNext()) {
             object = (com.example.weatherowpandroid.model.FullResponseListWeathers) objects.next();
@@ -366,7 +460,16 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
                 cache.put(object, ((RealmObjectProxy) object).realmGet$proxyState().getRow$realm().getIndex());
                 continue;
             }
-            long rowIndex = OsObject.createRow(table);
+            long rowIndex = Table.NO_MATCH;
+            Object primaryKeyValue = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary();
+            if (primaryKeyValue != null) {
+                rowIndex = Table.nativeFindFirstInt(tableNativePtr, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+            }
+            if (rowIndex == Table.NO_MATCH) {
+                rowIndex = OsObject.createRowWithPrimaryKey(table, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+            } else {
+                Table.throwDuplicatePrimaryKeyException(primaryKeyValue);
+            }
             cache.put(object, rowIndex);
             String realmGet$cod = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$cod();
             if (realmGet$cod != null) {
@@ -394,7 +497,15 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         Table table = realm.getTable(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
         long tableNativePtr = table.getNativePtr();
         FullResponseListWeathersColumnInfo columnInfo = (FullResponseListWeathersColumnInfo) realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
-        long rowIndex = OsObject.createRow(table);
+        long pkColumnIndex = columnInfo.primaryIndex;
+        long rowIndex = Table.NO_MATCH;
+        Object primaryKeyValue = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary();
+        if (primaryKeyValue != null) {
+            rowIndex = Table.nativeFindFirstInt(tableNativePtr, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+        }
+        if (rowIndex == Table.NO_MATCH) {
+            rowIndex = OsObject.createRowWithPrimaryKey(table, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+        }
         cache.put(object, rowIndex);
         String realmGet$cod = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$cod();
         if (realmGet$cod != null) {
@@ -436,6 +547,7 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         Table table = realm.getTable(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
         long tableNativePtr = table.getNativePtr();
         FullResponseListWeathersColumnInfo columnInfo = (FullResponseListWeathersColumnInfo) realm.getSchema().getColumnInfo(com.example.weatherowpandroid.model.FullResponseListWeathers.class);
+        long pkColumnIndex = columnInfo.primaryIndex;
         com.example.weatherowpandroid.model.FullResponseListWeathers object = null;
         while (objects.hasNext()) {
             object = (com.example.weatherowpandroid.model.FullResponseListWeathers) objects.next();
@@ -446,7 +558,14 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
                 cache.put(object, ((RealmObjectProxy) object).realmGet$proxyState().getRow$realm().getIndex());
                 continue;
             }
-            long rowIndex = OsObject.createRow(table);
+            long rowIndex = Table.NO_MATCH;
+            Object primaryKeyValue = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary();
+            if (primaryKeyValue != null) {
+                rowIndex = Table.nativeFindFirstInt(tableNativePtr, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+            }
+            if (rowIndex == Table.NO_MATCH) {
+                rowIndex = OsObject.createRowWithPrimaryKey(table, pkColumnIndex, ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$primary());
+            }
             cache.put(object, rowIndex);
             String realmGet$cod = ((com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) object).realmGet$cod();
             if (realmGet$cod != null) {
@@ -503,6 +622,7 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         }
         com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface unmanagedCopy = (com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) unmanagedObject;
         com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface realmSource = (com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) realmObject;
+        unmanagedCopy.realmSet$primary(realmSource.realmGet$primary());
         unmanagedCopy.realmSet$cod(realmSource.realmGet$cod());
 
         // Deep copy of list
@@ -523,6 +643,41 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
         return unmanagedObject;
     }
 
+    static com.example.weatherowpandroid.model.FullResponseListWeathers update(Realm realm, com.example.weatherowpandroid.model.FullResponseListWeathers realmObject, com.example.weatherowpandroid.model.FullResponseListWeathers newObject, Map<RealmModel, RealmObjectProxy> cache) {
+        com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface realmObjectTarget = (com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) realmObject;
+        com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface realmObjectSource = (com_example_weatherowpandroid_model_FullResponseListWeathersRealmProxyInterface) newObject;
+        realmObjectTarget.realmSet$cod(realmObjectSource.realmGet$cod());
+        RealmList<com.example.weatherowpandroid.model.ListWeathers> listList = realmObjectSource.realmGet$list();
+        RealmList<com.example.weatherowpandroid.model.ListWeathers> listRealmList = realmObjectTarget.realmGet$list();
+        if (listList != null && listList.size() == listRealmList.size()) {
+            // For lists of equal lengths, we need to set each element directly as clearing the receiver list can be wrong if the input and target list are the same.
+            int objects = listList.size();
+            for (int i = 0; i < objects; i++) {
+                com.example.weatherowpandroid.model.ListWeathers listItem = listList.get(i);
+                com.example.weatherowpandroid.model.ListWeathers cachelist = (com.example.weatherowpandroid.model.ListWeathers) cache.get(listItem);
+                if (cachelist != null) {
+                    listRealmList.set(i, cachelist);
+                } else {
+                    listRealmList.set(i, com_example_weatherowpandroid_model_ListWeathersRealmProxy.copyOrUpdate(realm, listItem, true, cache));
+                }
+            }
+        } else {
+            listRealmList.clear();
+            if (listList != null) {
+                for (int i = 0; i < listList.size(); i++) {
+                    com.example.weatherowpandroid.model.ListWeathers listItem = listList.get(i);
+                    com.example.weatherowpandroid.model.ListWeathers cachelist = (com.example.weatherowpandroid.model.ListWeathers) cache.get(listItem);
+                    if (cachelist != null) {
+                        listRealmList.add(cachelist);
+                    } else {
+                        listRealmList.add(com_example_weatherowpandroid_model_ListWeathersRealmProxy.copyOrUpdate(realm, listItem, true, cache));
+                    }
+                }
+            }
+        }
+        return realmObject;
+    }
+
     @Override
     @SuppressWarnings("ArrayToString")
     public String toString() {
@@ -530,6 +685,10 @@ public class com_example_weatherowpandroid_model_FullResponseListWeathersRealmPr
             return "Invalid object";
         }
         StringBuilder stringBuilder = new StringBuilder("FullResponseListWeathers = proxy[");
+        stringBuilder.append("{primary:");
+        stringBuilder.append(realmGet$primary());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
         stringBuilder.append("{cod:");
         stringBuilder.append(realmGet$cod() != null ? realmGet$cod() : "null");
         stringBuilder.append("}");

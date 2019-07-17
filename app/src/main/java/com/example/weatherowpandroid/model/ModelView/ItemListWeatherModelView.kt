@@ -1,6 +1,7 @@
 package com.example.weatherowpandroid.model.ModelView
 
 import com.example.weatherowpandroid.common.managers.DateManager
+import com.example.weatherowpandroid.common.managers.IconManager
 import com.example.weatherowpandroid.model.ListWeathers
 
 /**
@@ -15,8 +16,8 @@ class ItemListWeatherModelView(listWeathers : ListWeathers) : BaseModelView(){
 
     init {
         temperature = listWeathers.main?.temp
-        iconUrl = listWeathers.weather?.get(0)?.icon
-        dateText = DateManager.intToData(listWeathers.dt)
+        iconUrl = IconManager.iconIndeteficatorToURL(listWeathers.weather?.get(0)?.icon)
+        dateText = DateManager.formatToDate(listWeathers.dt)
         println(dateText)
     }
 }

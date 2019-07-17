@@ -64,6 +64,9 @@ dependencies {
     implementation "org.kodein.di:kodein-di-erased-jvm:$kodeinVersion"
     implementation "org.kodein.di:kodein-di-framework-android-x:$kodeinVersion"
 
+    //recycle view
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
 }
 
 kapt {

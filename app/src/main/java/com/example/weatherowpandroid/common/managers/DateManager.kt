@@ -1,5 +1,6 @@
 package com.example.weatherowpandroid.common.managers
 
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -10,9 +11,10 @@ import java.util.*
 class DateManager {
 
     companion object {
-        fun intToData(dateInt: Int?): String {
-            val date = Date(dateInt!!.toLong())
-            return date.toString()
+        fun formatToDate(unixTime: Long?): String {
+            val date = Date(unixTime!!*1000L)
+            val format = SimpleDateFormat("dd MMMM yyyy, HH:mm")
+            return format.format(date)
         }
     }
 

@@ -7,7 +7,7 @@ import com.example.weatherowpandroid.model.ModelView.BaseModelView
  * jtgn@yandex.ru
  */
 
-class ListWeatherContact {
+class ListWeatherContract {
 
     interface View : BaseContracts.View{
 
@@ -18,6 +18,7 @@ class ListWeatherContact {
         fun hideProgress()
 
         fun error(message : String?)
+
     }
 
 

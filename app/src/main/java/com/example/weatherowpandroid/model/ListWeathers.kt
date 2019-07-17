@@ -14,7 +14,7 @@ import io.realm.annotations.RealmClass
 
 open class ListWeathers : RealmObject() {
     @SerializedName("dt")
-    var dt: Int? = null
+    var dt: Long? = null
     @SerializedName("main")
     var main: Main? = null
     @SerializedName("weather")
@@ -25,4 +25,6 @@ open class ListWeathers : RealmObject() {
     var wind: Wind? = null
     @SerializedName("sys")
     var sys: Sys? = null
+    @SerializedName("dt_txt")
+    var dtTxt : String? = null
 }
