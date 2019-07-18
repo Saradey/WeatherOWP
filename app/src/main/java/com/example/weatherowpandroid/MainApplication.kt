@@ -3,6 +3,7 @@ package com.example.weatherowpandroid
 import android.app.Application
 import android.content.Context
 import com.example.weatherowpandroid.common.managers.NetworkManager
+import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.mvp.presenter.ListWeatherPresenter
 import com.example.weatherowpandroid.rest.RestClient
 import com.example.weatherowpandroid.rest.api.WeatherListByHourApi
@@ -71,7 +72,7 @@ class MainApplication : Application(), KodeinAware {
 
 
         //inject presenter
-        bind<ListWeatherPresenter>() with provider {
+        bind<ListWeatherContract.Presenter>() with provider {
             ListWeatherPresenter(
                 instance(),
                 instance(),

@@ -1,6 +1,6 @@
 package com.example.weatherowpandroid.mvp.contracts
 
-import com.example.weatherowpandroid.model.view.BaseModelView
+import com.example.weatherowpandroid.model.view.ItemWeatherModelView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -13,7 +13,7 @@ class ListWeatherContract {
 
     interface View : BaseContracts.View {
 
-        fun setWeathersListToView(it: List<BaseModelView>)
+        fun setWeathersListToView(it: List<ItemWeatherModelView>)
 
         fun showProgress()
 
@@ -26,6 +26,8 @@ class ListWeatherContract {
 
     abstract class Presenter : BaseContracts.Presenter<View>() {
         private val subscriptions = CompositeDisposable()
+
+        abstract fun getWeathersList(cityName: String)
 
         fun subscribe(subscription: Disposable) {
             subscriptions.add(subscription)

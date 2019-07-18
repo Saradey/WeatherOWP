@@ -1,10 +1,9 @@
 package com.example.weatherowpandroid.mvp.presenter
 
 import android.annotation.SuppressLint
-import com.example.weatherowpandroid.common.managers.NetworkManager
+import com.example.weatherowpandroid.common.managers.*
 import com.example.weatherowpandroid.model.ListWeathers
-import com.example.weatherowpandroid.model.view.BaseModelView
-import com.example.weatherowpandroid.model.view.ItemListWeatherModelView
+import com.example.weatherowpandroid.model.view.ItemWeatherModelView
 import com.example.weatherowpandroid.mvp.MainActivityRouter
 import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.rest.api.WeatherListByHourApi
@@ -31,7 +30,7 @@ class ListWeatherPresenter(
     lateinit var realm: Realm
 
 
-    fun getWeathersList(cityName: String) {
+    override fun getWeathersList(cityName: String) {
         networkManager.getNetworkState()
             .flatMap {
                 when (it) {
@@ -56,19 +55,19 @@ class ListWeatherPresenter(
     }
 
 
-    private fun loadFromNetwork(cityName: String): Observable<BaseModelView> {
+    private fun loadFromNetwork(cityName: String): Observable<ItemWeatherModelView> {
         return weatherApi.getListWeathersByHours(GetWeathersRequest(cityName).toRequest())
             .flatMap {
                 Observable.fromIterable(it.list)
             }
             .doOnNext(::saveToDataBase)
             .map {
-                ItemListWeatherModelView(it, view as MainActivityRouter)
+                modelDatabaseToModelView(it)
             }
     }
 
 
-    private fun loadFromDatabase(): Observable<BaseModelView> {
+    private fun loadFromDatabase(): Observable<ItemWeatherModelView> {
         return Observable.fromCallable {
             realm = Realm.getDefaultInstance()
             val realmResult = realm.where(ListWeathers::class.java)
@@ -77,10 +76,21 @@ class ListWeatherPresenter(
         }.flatMap {
             Observable.fromIterable(it)
         }.map {
-            ItemListWeatherModelView(it, view as MainActivityRouter)
+            modelDatabaseToModelView(it)
         }
     }
 
+
+    private fun modelDatabaseToModelView(listWeathers: ListWeathers): ItemWeatherModelView {
+        val item = ItemWeatherModelView(
+            temperature = "${TemperatureManager.kelvinInCelsius(listWeathers.main?.temp)}°",
+            iconUrl = IconManager.iconIndeteficatorToURL(listWeathers.weather?.get(0)?.icon),
+            dateText = DateManager.formatToDate(listWeathers.dt),
+            clouds = CloudsManager.determineCloudiness(listWeathers.clouds?.all),
+            dtId = listWeathers.dt!!
+        )
+        return item
+    }
 
 
     private fun saveToDataBase(item: RealmObject) {

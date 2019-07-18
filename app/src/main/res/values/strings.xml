@@ -8,5 +8,6 @@
     <string name="str_cloudy">Облачно</string>
     <string name="str_dark">Беспросветная тьма…</string>
     <string name="str_description">Подробное описание погоды:</string>
+    <string name="dialog_choose">DialogChoose</string>
 
 </resources>

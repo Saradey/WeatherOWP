@@ -1,24 +1,29 @@
 package com.example.weatherowpandroid.ui.adapters
 
-import android.util.ArrayMap
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherowpandroid.model.view.BaseModelView
-import com.example.weatherowpandroid.ui.holders.BaseViewHolder
+import com.example.weatherowpandroid.R
+import com.example.weatherowpandroid.model.view.ItemWeatherModelView
+import com.example.weatherowpandroid.mvp.MainActivityRouter
+import com.example.weatherowpandroid.ui.holders.ItemWeatherViewHolder
 
 /**
  * Created by Evgeny Goncharov on 17,July, 2019
  * jtgn@yandex.ru
  */
 
-class BaseAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
-    private val listData = arrayListOf<BaseModelView>()
-    private val mTypeInstance = ArrayMap<Int, BaseModelView>()
+class BaseAdapter(private val router: MainActivityRouter) :
+    RecyclerView.Adapter<ItemWeatherViewHolder>() {
+
+    val listData = arrayListOf<ItemWeatherModelView>()
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        return mTypeInstance[viewType]!!.createViewHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemWeatherViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.holder_weather_information, parent, false)
+        return ItemWeatherViewHolder(view, router)
     }
 
 
@@ -27,31 +32,17 @@ class BaseAdapter : RecyclerView.Adapter<BaseViewHolder>() {
     }
 
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemWeatherViewHolder, position: Int) {
         holder.bindViewHolder(getItemCount(position))
     }
 
 
-    override fun getItemViewType(position: Int): Int {
-        return getItemCount(position).getType().idLayout
-    }
-
-
-    private fun getItemCount(position: Int): BaseModelView {
+    private fun getItemCount(position: Int): ItemWeatherModelView {
         return listData[position]
     }
 
 
-    private fun registerTypeInstance(model: BaseModelView) {
-        if (!mTypeInstance.containsKey(model.getType().idLayout))
-            mTypeInstance.put(model.getType().idLayout, model)
-    }
-
-
-    fun addItem(listDateView : List<BaseModelView>){
-        for(item in listDateView){
-            registerTypeInstance(item)
-        }
+    fun addItem(listDateView: List<ItemWeatherModelView>) {
         listData.addAll(listDateView)
         notifyDataSetChanged()
     }

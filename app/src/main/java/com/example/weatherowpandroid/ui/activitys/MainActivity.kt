@@ -3,16 +3,20 @@ package com.example.weatherowpandroid.ui.activitys
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherowpandroid.MainApplication
 import com.example.weatherowpandroid.R
-import com.example.weatherowpandroid.model.view.BaseModelView
+import com.example.weatherowpandroid.model.view.ItemWeatherModelView
 import com.example.weatherowpandroid.mvp.MainActivityRouter
 import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.mvp.presenter.DialogChooseWeatherPresenter
-import com.example.weatherowpandroid.mvp.presenter.ListWeatherPresenter
 import com.example.weatherowpandroid.ui.adapters.BaseAdapter
 import com.example.weatherowpandroid.ui.dialogs.ChooseWeatherDialog
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_recycle.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -28,11 +32,14 @@ class MainActivity : AppCompatActivity(),
 
     lateinit var adapter: BaseAdapter
 
-    private val presenter: ListWeatherPresenter by instance<ListWeatherPresenter>()
+    private val presenter: ListWeatherContract.Presenter by instance<ListWeatherContract.Presenter>()
 
 
     companion object {
         private const val DIALOG_CHOOSE = "DialogChoose"
+
+        private const val KEY_SAVE_STATE = "LAYOUT_MANAGER_STATE"
+        private const val KEY_SAVE_DATA = "RECYCLE_DATA"
     }
 
 
@@ -41,45 +48,84 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
         kodein = (application as MainApplication).kodein
 
-
         val layoutManager = LinearLayoutManager(this)
-        weathers_list_recycle.layoutManager = layoutManager
-        adapter = BaseAdapter()
-        weathers_list_recycle.adapter = adapter
+        weathers_list_recycle.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
+        adapter = BaseAdapter(this)
+        weathers_list_recycle.adapter = adapter
         presenter.attach(this)
 
-        presenter.getWeathersList("Moscow")
+
+        getDataFromBackendOrRestore(savedInstanceState)
+    }
+
+
+    private fun getDataFromBackendOrRestore(
+        savedInstanceState: Bundle?
+    ) {
+        if (savedInstanceState != null) {
+            weathers_list_recycle.layoutManager?.onRestoreInstanceState(
+                savedInstanceState.getParcelable(KEY_SAVE_STATE)
+            )
+            adapter.addItem(
+                savedInstanceState.getParcelableArrayList<ItemWeatherModelView>(
+                    KEY_SAVE_DATA
+                ) ?: arrayListOf()
+            )
+            showDialogAfterRestore()
+        } else {
+            presenter.getWeathersList("Moscow")
+        }
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelable(
+            KEY_SAVE_STATE,
+            weathers_list_recycle.layoutManager?.onSaveInstanceState()
+        )
+        outState.putParcelableArrayList(
+            KEY_SAVE_DATA,
+            adapter.listData
+        )
+        super.onSaveInstanceState(outState)
     }
 
 
     override fun clickElement(idItemClick: Int?) {
-        val dialogChooseWeather = ChooseWeatherDialog(
-            idItemClick ?: 0,
+        val dialog = ChooseWeatherDialog(
             DialogChooseWeatherPresenter()
         )
-
-        dialogChooseWeather.show(supportFragmentManager, DIALOG_CHOOSE)
+        dialog.idItem = idItemClick!!
+        supportFragmentManager.beginTransaction()
+            .add(dialog, DIALOG_CHOOSE)
+            .commit()
     }
 
 
-    override fun setWeathersListToView(it: List<BaseModelView>) {
+    private fun showDialogAfterRestore() {
+
+    }
+
+
+    override fun setWeathersListToView(it: List<ItemWeatherModelView>) {
         adapter.addItem(it)
     }
 
 
     override fun showProgress() {
-
+        progressLoad?.visibility = View.VISIBLE
     }
 
 
     override fun hideProgress() {
-
+        progressLoad?.visibility = View.GONE
     }
 
 
+    @SuppressLint("ShowToast")
     override fun error(message: String?) {
-
+        Toast.makeText(this, message, Toast.LENGTH_LONG)
     }
 
 

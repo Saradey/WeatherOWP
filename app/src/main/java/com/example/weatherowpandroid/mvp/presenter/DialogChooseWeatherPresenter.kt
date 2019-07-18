@@ -1,6 +1,7 @@
 package com.example.weatherowpandroid.mvp.presenter
 
 import android.annotation.SuppressLint
+import com.example.weatherowpandroid.common.managers.IconManager
 import com.example.weatherowpandroid.model.ListWeathers
 import com.example.weatherowpandroid.model.view.ItemSelectedModelView
 import com.example.weatherowpandroid.mvp.contracts.DialogChooseContract
@@ -22,7 +23,6 @@ class DialogChooseWeatherPresenter : DialogChooseContract.Presenter() {
 
 
     override fun loadChooseItemFromDatabase(id: Int) {
-        println(id)
         Observable.fromCallable {
             realm = Realm.getDefaultInstance()
             val result = realm.where(ListWeathers::class.java)
@@ -30,7 +30,11 @@ class DialogChooseWeatherPresenter : DialogChooseContract.Presenter() {
                 .findFirst()
             realm.copyFromRealm(result)
         }.map {
-            ItemSelectedModelView(it)
+            ItemSelectedModelView(
+                it.weather?.get(0)?.main ?: "",
+                it.weather?.get(0)?.description ?: "",
+                IconManager.iconIndeteficatorToURL(it.weather?.get(0)?.icon)
+            )
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
