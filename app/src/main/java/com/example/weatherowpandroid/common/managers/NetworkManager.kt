@@ -23,16 +23,14 @@ open class NetworkManager {
 
     var context: Context? = null
         set(value) {
-        val cm =
-            value!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        network = cm.activeNetworkInfo
+            val cm =
+                value!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            network = cm.activeNetworkInfo
             field = value
         }
 
 
     private var network: NetworkInfo? = null
-
-
 
 
     private fun isOnlineNetwork(): Boolean {

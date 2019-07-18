@@ -9,7 +9,7 @@ import io.realm.RealmObject
  * jtgn@yandex.ru
  */
 
-open class Wind : RealmObject(){
+open class Wind : RealmObject() {
     @SerializedName("speed")
     var speed: Float? = null
     @SerializedName("deg")

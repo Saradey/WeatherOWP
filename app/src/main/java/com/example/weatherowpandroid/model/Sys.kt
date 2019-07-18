@@ -8,6 +8,7 @@ import io.realm.RealmObject
  * jtgn@yandex.ru
  */
 
-open class Sys : RealmObject(){
-    @SerializedName("pod") var pod: String? = null
+open class Sys : RealmObject() {
+    @SerializedName("pod")
+    var pod: String? = null
 }

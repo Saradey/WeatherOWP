@@ -7,12 +7,8 @@ package com.example.weatherowpandroid.common.managers
 
 class TemperatureManager {
 
-    companion object{
-
-        fun kelvinInCelsius(kelvin : Float?): Int{
-            return kelvin!!.toInt() - 273
-        }
-
+    fun kelvinInCelsius(kelvin: Float?): Int {
+        return kelvin!!.toInt() - 273
     }
 
 }

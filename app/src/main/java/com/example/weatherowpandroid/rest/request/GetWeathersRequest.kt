@@ -7,7 +7,7 @@ import com.example.weatherowpandroid.consts.NAME_CITY_PARAM
  * jtgn@yandex.ru
  */
 
-class GetWeathersRequest(val cityName : String) : BaseRequestModel(){
+class GetWeathersRequest(val cityName: String) : BaseRequestModel() {
 
 
     override fun createParamRequest(request: HashMap<String, String>) {

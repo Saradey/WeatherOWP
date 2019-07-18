@@ -1,10 +1,6 @@
 package com.example.weatherowpandroid.model.view
 
 import android.os.Parcelable
-import com.example.weatherowpandroid.common.managers.CloudsManager
-import com.example.weatherowpandroid.common.managers.DateManager
-import com.example.weatherowpandroid.common.managers.IconManager
-import com.example.weatherowpandroid.common.managers.TemperatureManager
 import kotlinx.android.parcel.Parcelize
 
 /**

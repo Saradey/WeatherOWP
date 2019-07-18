@@ -7,7 +7,7 @@ import com.example.weatherowpandroid.model.view.ItemSelectedModelView
  * jtgn@yandex.ru
  */
 
-class DialogChooseContract {
+class ChooseWeatherDialogContract {
 
 
     interface View : BaseContracts.View {

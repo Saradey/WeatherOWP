@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import com.example.weatherowpandroid.common.managers.*
 import com.example.weatherowpandroid.model.ListWeathers
 import com.example.weatherowpandroid.model.view.ItemWeatherModelView
-import com.example.weatherowpandroid.mvp.MainActivityRouter
 import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.rest.api.WeatherListByHourApi
 import com.example.weatherowpandroid.rest.request.GetWeathersRequest
@@ -24,7 +23,11 @@ class ListWeatherPresenter(
     private val weatherApi: WeatherListByHourApi,
     private val networkManager: NetworkManager,
     private val backgroundScheduler: Scheduler,
-    private val mainThread: Scheduler
+    private val mainThread: Scheduler,
+    private val cloudsManager: CloudsManager,
+    private val dateManager: DateManager,
+    private val iconManager: IconManager,
+    private val temperatureManager: TemperatureManager
 ) : ListWeatherContract.Presenter() {
 
     lateinit var realm: Realm
@@ -83,10 +86,10 @@ class ListWeatherPresenter(
 
     private fun modelDatabaseToModelView(listWeathers: ListWeathers): ItemWeatherModelView {
         val item = ItemWeatherModelView(
-            temperature = "${TemperatureManager.kelvinInCelsius(listWeathers.main?.temp)}°",
-            iconUrl = IconManager.iconIndeteficatorToURL(listWeathers.weather?.get(0)?.icon),
-            dateText = DateManager.formatToDate(listWeathers.dt),
-            clouds = CloudsManager.determineCloudiness(listWeathers.clouds?.all),
+            temperature = "${temperatureManager.kelvinInCelsius(listWeathers.main?.temp)}°",
+            iconUrl = iconManager.iconIndeteficatorToURL(listWeathers.weather?.get(0)?.icon),
+            dateText = dateManager.formatToDate(listWeathers.dt),
+            clouds = cloudsManager.determineCloudiness(listWeathers.clouds?.all),
             dtId = listWeathers.dt!!
         )
         return item

@@ -9,7 +9,7 @@ import io.realm.RealmObject
  * jtgn@yandex.ru
  */
 
-open class Clouds : RealmObject(){
+open class Clouds : RealmObject() {
     @SerializedName("all")
     var all: Int? = null
 }

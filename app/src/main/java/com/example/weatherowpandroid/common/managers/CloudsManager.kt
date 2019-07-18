@@ -16,16 +16,17 @@ class CloudsManager {
         private const val CLOUDY = R.string.str_cloudy
         private const val DARK = R.string.str_dark
 
-        fun determineCloudiness(percent: Int?): Int {
-            return when (percent) {
-                in 0..25 -> CLOUDLESS
-                in 25..50 -> MANY_CLOUDY
-                in 50..75 -> CLOUDY
-                in 75..100 -> DARK
-                else -> CLOUDLESS
-            }
-        }
+    }
 
+
+    fun determineCloudiness(percent: Int?): Int {
+        return when (percent) {
+            in 0..25 -> CLOUDLESS
+            in 25..50 -> MANY_CLOUDY
+            in 50..75 -> CLOUDY
+            in 75..100 -> DARK
+            else -> CLOUDLESS
+        }
     }
 
 }

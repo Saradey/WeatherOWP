@@ -1,8 +1,6 @@
 package com.example.weatherowpandroid.model.view
 
 import android.os.Parcelable
-import com.example.weatherowpandroid.common.managers.IconManager
-import com.example.weatherowpandroid.model.ListWeathers
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -14,6 +12,7 @@ import kotlinx.android.parcel.Parcelize
 data class ItemSelectedModelView(
     var main: String,
     var description: String,
-    var imageUrl: String) : Parcelable
+    var imageUrl: String
+) : Parcelable
 
 

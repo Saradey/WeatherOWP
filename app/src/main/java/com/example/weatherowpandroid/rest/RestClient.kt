@@ -1,8 +1,6 @@
 package com.example.weatherowpandroid.rest
 
-import android.util.Log
 import com.example.weatherowpandroid.consts.BASE_URL
-import com.example.weatherowpandroid.consts.LOG_REST
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

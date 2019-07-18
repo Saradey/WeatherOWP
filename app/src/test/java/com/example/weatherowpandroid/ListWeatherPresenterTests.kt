@@ -1,6 +1,6 @@
 package com.example.weatherowpandroid
 
-import com.example.weatherowpandroid.common.managers.NetworkManager
+import com.example.weatherowpandroid.common.managers.*
 import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
 import com.example.weatherowpandroid.mvp.presenter.ListWeatherPresenter
 import com.example.weatherowpandroid.rest.RestClient
@@ -36,6 +36,11 @@ class ListWeatherPresenterTests {
     lateinit var backgroundScheduler: Scheduler
     lateinit var mainThread: Scheduler
 
+    lateinit var cloudsManager: CloudsManager
+    lateinit var dateManager: DateManager
+    lateinit var iconManager: IconManager
+    lateinit var temperatureManager: TemperatureManager
+
 
     companion object {
         const val cityName = "Default"
@@ -59,17 +64,23 @@ class ListWeatherPresenterTests {
         mainThread = Schedulers.trampoline()
         apiWea = restClient.createService<WeatherListByHourApi>()
 
+        cloudsManager = CloudsManager()
+        dateManager = DateManager()
+        iconManager = IconManager()
+        temperatureManager = TemperatureManager()
+
         presenter = ListWeatherPresenter(
             apiWea,
             networkManager,
             backgroundScheduler,
-            mainThread
+            mainThread,
+            cloudsManager,
+            dateManager,
+            iconManager,
+            temperatureManager
         )
         presenter.attach(view)
     }
-
-
-
 
 
     //кейс: успешная загрузка
@@ -92,7 +103,7 @@ class ListWeatherPresenterTests {
 
     //кейс: при перевороте экрана отписка
     @Test
-    fun testFieldLoadFromInternet(){
+    fun testFieldLoadFromInternet() {
         Mockito.`when`(networkManager.getNetworkState())
             .thenReturn(Observable.just(true))
 
@@ -101,7 +112,11 @@ class ListWeatherPresenterTests {
             apiWea,
             networkManager,
             backgroundScheduler,
-            mainThread
+            mainThread,
+            cloudsManager,
+            dateManager,
+            iconManager,
+            temperatureManager
         )
         presenter.realm = realm
         presenter.attach(view)
@@ -115,8 +130,6 @@ class ListWeatherPresenterTests {
         inOrder.verify(view).showProgress()
         inOrder.verify(view, never()).setWeathersListToView(ArgumentMatchers.anyList())
     }
-
-
 
 
 }

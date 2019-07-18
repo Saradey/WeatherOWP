@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import com.example.weatherowpandroid.common.managers.IconManager
 import com.example.weatherowpandroid.model.ListWeathers
 import com.example.weatherowpandroid.model.view.ItemSelectedModelView
-import com.example.weatherowpandroid.mvp.contracts.DialogChooseContract
+import com.example.weatherowpandroid.mvp.contracts.ChooseWeatherDialogContract
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,7 +17,9 @@ import io.realm.Realm
  */
 
 @SuppressLint("CheckResult")
-class DialogChooseWeatherPresenter : DialogChooseContract.Presenter() {
+class ChooseWeatherPresenter(
+    private val iconManager: IconManager
+) : ChooseWeatherDialogContract.Presenter() {
 
     lateinit var realm: Realm
 
@@ -33,7 +35,7 @@ class DialogChooseWeatherPresenter : DialogChooseContract.Presenter() {
             ItemSelectedModelView(
                 it.weather?.get(0)?.main ?: "",
                 it.weather?.get(0)?.description ?: "",
-                IconManager.iconIndeteficatorToURL(it.weather?.get(0)?.icon)
+                iconManager.iconIndeteficatorToURL(it.weather?.get(0)?.icon)
             )
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

@@ -1,11 +1,10 @@
 package com.example.weatherowpandroid.ui.activitys
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherowpandroid.MainApplication
@@ -13,7 +12,6 @@ import com.example.weatherowpandroid.R
 import com.example.weatherowpandroid.model.view.ItemWeatherModelView
 import com.example.weatherowpandroid.mvp.MainActivityRouter
 import com.example.weatherowpandroid.mvp.contracts.ListWeatherContract
-import com.example.weatherowpandroid.mvp.presenter.DialogChooseWeatherPresenter
 import com.example.weatherowpandroid.ui.adapters.BaseAdapter
 import com.example.weatherowpandroid.ui.dialogs.ChooseWeatherDialog
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,7 +30,8 @@ class MainActivity : AppCompatActivity(),
 
     lateinit var adapter: BaseAdapter
 
-    private val presenter: ListWeatherContract.Presenter by instance<ListWeatherContract.Presenter>()
+    private val presenter:
+            ListWeatherContract.Presenter by instance<ListWeatherContract.Presenter>()
 
 
     companion object {
@@ -48,15 +47,18 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
         kodein = (application as MainApplication).kodein
 
+        initRecycleAndAdapter()
+        presenter.attach(this)
+        getDataFromBackendOrRestore(savedInstanceState)
+    }
+
+
+    private fun initRecycleAndAdapter() {
         val layoutManager = LinearLayoutManager(this)
         weathers_list_recycle.layoutManager = layoutManager as RecyclerView.LayoutManager?
 
         adapter = BaseAdapter(this)
         weathers_list_recycle.adapter = adapter
-        presenter.attach(this)
-
-
-        getDataFromBackendOrRestore(savedInstanceState)
     }
 
 
@@ -72,7 +74,6 @@ class MainActivity : AppCompatActivity(),
                     KEY_SAVE_DATA
                 ) ?: arrayListOf()
             )
-            showDialogAfterRestore()
         } else {
             presenter.getWeathersList("Moscow")
         }
@@ -93,18 +94,11 @@ class MainActivity : AppCompatActivity(),
 
 
     override fun clickElement(idItemClick: Int?) {
-        val dialog = ChooseWeatherDialog(
-            DialogChooseWeatherPresenter()
-        )
+        val dialog = ChooseWeatherDialog()
         dialog.idItem = idItemClick!!
         supportFragmentManager.beginTransaction()
             .add(dialog, DIALOG_CHOOSE)
             .commit()
-    }
-
-
-    private fun showDialogAfterRestore() {
-
     }
 
 

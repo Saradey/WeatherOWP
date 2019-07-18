@@ -9,7 +9,7 @@ import io.realm.RealmObject
  * jtgn@yandex.ru
  */
 
-open class Main : RealmObject(){
+open class Main : RealmObject() {
     @SerializedName("temp")
     var temp: Float? = null
     @SerializedName("pressure")

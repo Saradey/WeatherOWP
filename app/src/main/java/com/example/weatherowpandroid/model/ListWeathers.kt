@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
 
 
 /**
@@ -28,5 +27,5 @@ open class ListWeathers : RealmObject() {
     @SerializedName("sys")
     var sys: Sys? = null
     @SerializedName("dt_txt")
-    var dtTxt : String? = null
+    var dtTxt: String? = null
 }
