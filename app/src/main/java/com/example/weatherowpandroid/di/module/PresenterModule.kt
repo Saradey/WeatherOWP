@@ -31,6 +31,10 @@ val presenterModule = Kodein.Module("PresenterModule") {
     }
 
     bind<ChooseWeatherDialogContract.Presenter>() with provider {
-        ChooseWeatherPresenter(instance())
+        ChooseWeatherPresenter(
+            instance(),
+            instance(MainApplication.SCHEDULER_IO),
+            instance(MainApplication.SCHEDULER_MAIN)
+        )
     }
 }
