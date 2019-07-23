@@ -34,7 +34,7 @@ class ListWeatherPresenter(
 
 
     override fun getWeathersList(cityName: String) {
-        networkManager.getNetworkState()
+        subscribe(networkManager.getNetworkState()
             .flatMap {
                 when (it) {
                     true -> loadFromNetwork(cityName)
@@ -54,7 +54,7 @@ class ListWeatherPresenter(
             }, {
                 view.error(it.message)
                 it.printStackTrace()
-            })
+            }))
     }
 
 
