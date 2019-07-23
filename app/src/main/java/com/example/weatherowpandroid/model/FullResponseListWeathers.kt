@@ -11,8 +11,6 @@ import io.realm.RealmList
 
 
 class FullResponseListWeathers {
-    @SerializedName("cod")
-    var cod: String? = null
     @SerializedName("list")
     var list: RealmList<ListWeathers>? = RealmList()
 }

@@ -22,10 +22,4 @@ open class ListWeathers : RealmObject() {
     var weather: RealmList<Weather>? = RealmList()
     @SerializedName("clouds")
     var clouds: Clouds? = null
-    @SerializedName("wind")
-    var wind: Wind? = null
-    @SerializedName("sys")
-    var sys: Sys? = null
-    @SerializedName("dt_txt")
-    var dtTxt: String? = null
 }

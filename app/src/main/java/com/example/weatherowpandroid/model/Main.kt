@@ -12,14 +12,4 @@ import io.realm.RealmObject
 open class Main : RealmObject() {
     @SerializedName("temp")
     var temp: Float? = null
-    @SerializedName("pressure")
-    var pressure: Float? = null
-    @SerializedName("sea_level")
-    var seaLevel: Float? = null
-    @SerializedName("grnd_level")
-    var grndLevel: Float? = null
-    @SerializedName("humidity")
-    var humidity: Int? = null
-    @SerializedName("temp_kf")
-    var tempKf: Float? = null
 }
